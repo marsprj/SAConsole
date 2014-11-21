@@ -2,10 +2,12 @@
 
 import wx
 import logging
+from PanelConfig import ConfigPanel
+from PanelRun import RunPanel
 
 class FrmMain(wx.Frame):
 	def __init__(self, parent):
-		wx.Frame.__init__(self, parent, title=u'SA管理控制台', size=(600,100),style=wx.DEFAULT_FRAME_STYLE^(wx.RESIZE_BORDER|wx.MINIMIZE_BOX|wx.MAXIMIZE_BOX))
+		wx.Frame.__init__(self, parent, title=u'SA管理控制台', size=(600,600),style=wx.DEFAULT_FRAME_STYLE^(wx.RESIZE_BORDER|wx.MINIMIZE_BOX|wx.MAXIMIZE_BOX))
 
 		panel = wx.Panel(self)
 
@@ -32,7 +34,7 @@ class FrmMain(wx.Frame):
 		btn = wx.BitmapButton(panel, -1, bmp)
 		self.Bind(wx.EVT_BUTTON, self.onRun, btn)
 		hbox_bar.Add(btn, 1, wx.EXPAND)
-				#u"运行结果"
+		#u"运行结果"
 		bmp =  wx.Image('images/05.png', wx.BITMAP_TYPE_PNG).ConvertToBitmap()
 		btn = wx.BitmapButton(panel, -1, bmp)
 		self.Bind(wx.EVT_BUTTON, self.onResult, btn)
@@ -46,38 +48,63 @@ class FrmMain(wx.Frame):
  		vbox.Add(hbox_bar,flag=wx.LEFT|wx.RIGHT|wx.TOP,border=3)
 		vbox.Add((-1,5))
 
-		self.hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-		#self.content = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
-		#hbox3.Add(self.content, proportion=1, flag=wx.EXPAND)
-		self.p1 = wx.Panel(panel)
-		self.p1.SetBackgroundColour('Red') 
-		self.hbox3.Add(self.p1, proportion=1, flag=wx.EXPAND)
-		self.p2 = wx.Panel(panel)
-		self.p2.SetBackgroundColour('Blue') 
-		self.p2.Show(False)
-		self.hbox3.Add(self.p2, proportion=1, flag=wx.EXPAND)
-		self.hbox3.Layout()
-		vbox.Add(self.hbox3, proportion=1, flag=wx.LEFT|wx.RIGHT|wx.EXPAND, border=3)
+#		self.hbox_main = wx.BoxSizer(wx.HORIZONTAL)
+#		self.p1 = wx.Panel(panel)
+#		self.p1.SetBackgroundColour('Red') 
+#		self.hbox_main.Add(self.p1, proportion=1, flag=wx.EXPAND)
+#		# Config Panel
+#		self.panenConfig = ConfigPanel(panel)
+#		self.panenConfig.Show(False)
+#		self.hbox_main.Add(self.panenConfig, proportion=1, flag=wx.EXPAND)
+#		self.hbox_main.Layout()
+#		vbox.Add(self.hbox_main, proportion=1, flag=wx.LEFT|wx.RIGHT|wx.EXPAND, border=3)
+
+		self.hbox_main = wx.BoxSizer(wx.HORIZONTAL)
+		self.InitPanels(panel, self.hbox_main)
+		self.ShowPanel(0)
+		vbox.Add(self.hbox_main, proportion=1, flag=wx.LEFT|wx.RIGHT|wx.EXPAND, border=3)
 
 		panel.SetSizer(vbox)
 
 	def onInstall(self, event):
-		pass
+		self.ShowPanel(0)
 
 	def onCopyData(self, event):
-		pass
+		self.ShowPanel(1)
 
 	def onConfiguration(self, event):
-		pass
+		self.ShowPanel(2)
 
 	def onRun(self, event):
-		pass
+		self.ShowPanel(3)
 
 	def onResult(self, event):
-		pass
+		self.ShowPanel(4)
 
 	def onLog(self, event):
-		pass
+		self.ShowPanel(5)
+
+	def InitPanels(self, parent, hbox):
+		p1 = wx.Panel(parent)
+		p2 = ConfigPanel(parent)
+		p3 = RunPanel(parent)
+		self.panels = [p1, None, p2, p3]
+		for p in self.panels:
+			if(p!=None):
+				hbox.Add(p, proportion=1, flag=wx.EXPAND)
+				p.Show(False)
+
+	def ShowPanel(self, index):
+		for p in self.panels:
+			if(p!=None):
+				p.Show(False)
+		print len(self.panels)
+		if(index<len(self.panels)):
+			p = self.panels[index]
+			if(p!=None):
+				p.Show(True)
+				self.hbox_main.Layout()
+
 
 if __name__ == '__main__':
 	app = wx.App()
