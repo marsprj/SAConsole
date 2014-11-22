@@ -22,7 +22,9 @@ class RunPanel(wx.Panel):
 	def initUI(self):
 
 		self.sa_home = SAConfig.GetValue('sa_home')
-		self.sa_dir  = self.sa_home
+		self.sa_name = SAConfig.GetValue('sa_name')
+		self.sa_base = os.path.join(self.sa_home, self.sa_name)
+		self.sa_dir  = os.path.join(self.sa_base, 'srgtools')
 		self.sa_exe  = os.path.join(self.sa_dir, 'SurrogateTools.jar')
 		self.sa_log  = os.path.join(self.sa_dir, 'srg_grid.log')
 		
