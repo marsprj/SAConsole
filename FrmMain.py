@@ -2,9 +2,12 @@
 
 import wx
 import logging
-from InstallDialog import InstallDialog
+#from InstallDialog import InstallDialog
 from PanelConfig import ConfigPanel
 from PanelRun import RunPanel
+from PanelResult import ResultPanel
+from FrmInstall import FrmInstall
+from FrmDataCopy import FrmDataCopy
 
 class FrmMain(wx.Frame):
 	def __init__(self, parent):
@@ -69,18 +72,24 @@ class FrmMain(wx.Frame):
 		panel.SetSizer(vbox)
 
 	def onInstall(self, event):
-		#self.ShowPanel(0)
-		dlg = InstallDialog()
-		dlg.Centre()
-		result = dlg.ShowModal()
-		if result == wx.ID_OK:
-			print 'OK'
-		else:
-			print 'Cancel'
-		dlg.Destroy()
+
+		frm = FrmInstall(self)
+		frm.Centre()
+		frm.Show(True)
+#		dlg = InstallDialog()
+#		dlg.Centre()
+#		result = dlg.ShowModal()
+#		if result == wx.ID_OK:
+#			print 'OK'
+#		else:
+#			print 'Cancel'
+#		dlg.Destroy()
 
 	def onCopyData(self, event):
-		self.ShowPanel(1)
+		#self.ShowPanel(1)
+		frm = FrmDataCopy(self)
+		frm.Centre()
+		frm.Show(True)
 
 	def onConfiguration(self, event):
 		self.ShowPanel(2)
@@ -99,7 +108,8 @@ class FrmMain(wx.Frame):
 		p1 = wx.Panel(parent)
 		p2 = ConfigPanel(parent)
 		p3 = RunPanel(parent)
-		self.panels = [p1, None, p2, p3]
+		p4 = ResultPanel(parent)
+		self.panels = [p1, None, p2, p3, p4]
 		for p in self.panels:
 			if(p!=None):
 				hbox.Add(p, proportion=1, flag=wx.EXPAND)
