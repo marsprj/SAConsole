@@ -86,6 +86,7 @@ class FrmMain(wx.Frame):
 		self.ShowPanel(2)
 
 	def onRun(self, event):
+		print 'onRun'
 		self.ShowPanel(3)
 
 	def onResult(self, event):

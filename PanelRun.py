@@ -4,6 +4,14 @@ import wx
 import os
 import sys
 import logging
+import SAConfig
+
+class RedirectText(object):
+	def __init__(self,aWxTextCtrl):
+		self.out=aWxTextCtrl
+
+	def write(self,string):
+		self.out.WriteText(string)
 
 class RunPanel(wx.Panel):
 
@@ -12,8 +20,11 @@ class RunPanel(wx.Panel):
 		self.initUI()
 
 	def initUI(self):
-		self.exe_dir = 'G:\\temp\\sa'
-		self.log_path = ''
+
+		self.sa_home = SAConfig.GetValue('sa_home')
+		self.sa_dir  = self.sa_home
+		self.sa_exe  = os.path.join(self.sa_dir, 'SurrogateTools.jar')
+		self.sa_log  = os.path.join(self.sa_dir, 'srg_grid.log')
 		
 		vbox = wx.BoxSizer(wx.VERTICAL)
 
@@ -24,26 +35,46 @@ class RunPanel(wx.Panel):
 		hbox1.Add(st1,flag=wx.RIGHT,border=8)
 		txtPath = wx.TextCtrl(self,style=wx.TE_READONLY)
 		txtPath.SetBackgroundColour('#FFFFFF')
-		txtPath.SetValue(self.exe_dir)
-		hbox1.Add(txtPath,proportion=1)
+		txtPath.SetValue(self.sa_exe)
+		hbox1.Add(txtPath,proportion=1)		
 		vbox.Add(hbox1,flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
+
 		btn = wx.Button(self, -1, u"运行")
 		self.Bind(wx.EVT_BUTTON, self.onRun, btn)
+		hbox1.Add(btn, flag=wx.LEFT|wx.RIGHT,border=10)
+
+		btn = wx.Button(self, -1, u"日志")
+		self.Bind(wx.EVT_BUTTON, self.onLog, btn)
 		hbox1.Add(btn, flag=wx.LEFT|wx.RIGHT,border=10)
 
 		vbox.Add((-1,10))
 
 		hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-		txtLog = wx.TextCtrl(self, style=wx.TE_MULTILINE|wx.HSCROLL|wx.TE_MULTILINE)
-		txtLog.SetBackgroundColour('#FFFFFF')
-		hbox3.Add(txtLog, proportion=1, flag=wx.EXPAND)
+		self.txtLog = wx.TextCtrl(self, style=wx.TE_MULTILINE|wx.HSCROLL|wx.TE_MULTILINE)
+		self.txtLog.SetBackgroundColour('#FFFFFF')
+		hbox3.Add(self.txtLog, proportion=1, flag=wx.EXPAND)
 		vbox.Add(hbox3, proportion=1, flag=wx.LEFT|wx.RIGHT|wx.EXPAND, border=10)
 
 		vbox.Add((-1, 25))
 		self.SetSizer(vbox)
 
-	def onRun(self, event):
+	def onRun(self, event):		
 		logging.error('onRun.....')
-		exe_path = os.path.join(self.exe_dir, 'SurrogateTools.jar')
-		exe_cmd  = 'java -classpath ' + exe_path + ' gov.epa.surrogate.SurrogateTool control_variables_grid.csv'
-		os.system(exe_cmd);
+		#sys.stdout = RedirectText(self.txtLog) 
+		exe_cmd  = 'java -classpath ' + self.sa_exe + ' gov.epa.surrogate.SurrogateTool control_variables_grid.csv'
+		logs = os.system(exe_cmd)
+		#logs = os.popen(exe_cmd).readlines()
+		#print logs
+
+	def onLog(self, event):		
+		fp = None
+		try:
+			fp = open(self.sa_log)
+			text = fp.read()
+			self.txtLog.SetValue(text)
+		except IOError,e:
+			logging.error(e)
+		finally:
+			if(fp!=None):
+				fp.close()
+
