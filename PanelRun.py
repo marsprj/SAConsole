@@ -40,11 +40,11 @@ class RunPanel(wx.Panel):
 		vbox.Add(hbox1,flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
 
 		btn = wx.Button(self, -1, u"运行")
-		self.Bind(wx.EVT_BUTTON, self.onRun, btn)
+		self.Bind(wx.EVT_BUTTON, self.OnRun, btn)
 		hbox1.Add(btn, flag=wx.LEFT|wx.RIGHT,border=10)
 
 		btn = wx.Button(self, -1, u"日志")
-		self.Bind(wx.EVT_BUTTON, self.onLog, btn)
+		self.Bind(wx.EVT_BUTTON, self.OnLog, btn)
 		hbox1.Add(btn, flag=wx.LEFT|wx.RIGHT,border=10)
 
 		vbox.Add((-1,10))
@@ -57,17 +57,19 @@ class RunPanel(wx.Panel):
 
 		vbox.Add((-1, 25))
 		self.SetSizer(vbox)
+		self.timer = wx.Timer(self)
+		self.Bind(wx.EVT_TIMER, self.onReadLog, self.timer)
 
-	def onRun(self, event):		
-		logging.error('onRun.....')
-		#sys.stdout = RedirectText(self.txtLog) 
+	def OnRun(self, event):
+		self.timer.Start(10*1000)
 		exe_cmd  = 'java -classpath ' + self.sa_exe + ' gov.epa.surrogate.SurrogateTool control_variables_grid.csv'
-		logs = os.system(exe_cmd)
-		#logs = os.popen(exe_cmd).readlines()
-		#print logs
+		os.open(exe_cmd)
+		self.timer.Stop()
 
-	def onLog(self, event):		
-		fp = None
+	def OnLog(self, event):
+		self.timer.Stop()
+
+	def onReadLog(self, event):
 		try:
 			fp = open(self.sa_log)
 			text = fp.read()
