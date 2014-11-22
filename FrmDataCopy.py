@@ -1,9 +1,11 @@
 #coding=utf-8
 
-import wx;
-import os;
-import shutil;
-import logging;
+import wx
+import os
+import shutil
+import logging
+import tarfile
+import SAConfig
 
 class FrmDataCopy(wx.Frame):
 	def __init__(self, parent):
@@ -12,7 +14,7 @@ class FrmDataCopy(wx.Frame):
 		panel = wx.Panel(self)
 
 		self.srcFile = '';
-		self.desFold = 'g://temp';
+		self.desFold = SAConfig.GetValue('sa_home')
 
 		# Choose Source File
 		wx.StaticText(panel, label=u'数据文件:', pos=(20,20))
@@ -43,9 +45,14 @@ class FrmDataCopy(wx.Frame):
 		dlg.Destroy()
 
 	def onChooseDestination(self, event):
-		dlg = wx.FileDialog(self, u'选择路径', self.desFold, '', '*.*', wx.OPEN)
+		#dlg = wx.FileDialog(self, u'选择路径', self.desFold, '', '*.*', wx.OPEN)		
+		#if dlg.ShowModal() == wx.ID_OK:
+		#	self.desFold = dlg.GetDirectory()			
+		#	self.txtDes.SetValue(self.desFold)
+		#dlg.Destroy()
+		dlg = wx.DirDialog(self, u'选择复制路径',style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
 		if dlg.ShowModal() == wx.ID_OK:
-			self.desFold = dlg.GetDirectory()			
+			self.desFold = dlg.GetPath()
 			self.txtDes.SetValue(self.desFold)
 		dlg.Destroy()
 
@@ -66,7 +73,23 @@ class FrmDataCopy(wx.Frame):
 			dlg.Destory()
 			return;
 
-		shutil.copy(self.srcFile, self.desFold)
+		#shutil.copy(self.srcFile, self.desFold)
+		print '...............................'
+		try:
+			print self.srcFile
+			tar = tarfile.open(self.srcFile)
+			names = tar.getnames()
+			for name in names:
+				tar.extract(name, self.desFold)
+			
+			tar.close()
+
+			#self.setSaHomeEnv(self.sa_home)
+
+			self.showMessageBox(u'安装完成', u'提示')
+		except ExtractError, e:
+			print "ExtractError e"
+			self.showMessageBox(u'tar包解压失败', u'错误')
 
 if __name__ == '__main__':
 	app = wx.App(False)
