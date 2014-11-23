@@ -55,10 +55,13 @@ class FrmInstall(wx.Frame):
 			self.showMessageBox(u'目录 ['+self.sa_home+u'] 不存在', u'警告')
 			return;
 
+		self.logPanel.Clear()
+		self.logPanel.Append(u'解压文件[' + self.tar_path + ']\n')
 		try:
 			tar = tarfile.open(self.tar_path)
 			names = tar.getnames()
 			for name in names:
+				self.logPanel.Append(name + '\n')
 				tar.extract(name, self.sa_home)
 			
 			tar.close()
@@ -78,3 +81,6 @@ class FrmInstall(wx.Frame):
 
 	def setSaHomeEnv(self, sa_home):
 		pass
+
+	def SetLogPanel(self,logPanel):
+		self.logPanel = logPanel
