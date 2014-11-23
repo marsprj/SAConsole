@@ -6,10 +6,11 @@ import shutil
 import logging
 import tarfile
 import SAConfig
+from PanelLog import LogPanel
 
 class FrmDataCopy(wx.Frame):
 	def __init__(self, parent):
-		wx.Frame.__init__(self, parent, title=u'拷贝数据',size=(560,300),style=wx.DEFAULT_FRAME_STYLE^(wx.RESIZE_BORDER|wx.MINIMIZE_BOX|wx.MAXIMIZE_BOX))
+		wx.Frame.__init__(self, parent, title=u'拷贝数据',size=(560,300),style=(wx.DEFAULT_FRAME_STYLE|wx.FRAME_NO_TASKBAR)^(wx.RESIZE_BORDER|wx.MINIMIZE_BOX|wx.MAXIMIZE_BOX))
 
 		panel = wx.Panel(self)
 
@@ -149,6 +150,7 @@ class FrmDataCopy(wx.Frame):
 			dlg.Destory()
 			return;
 
+		self.logPanel.Clear()
 		#shutil.copy(self.srcFile, self.desFold)
 		self.CopyData(self.srcFile1, self.desFold)
 		self.CopyData(self.srcFile2, self.desFold)
@@ -168,15 +170,21 @@ class FrmDataCopy(wx.Frame):
 			dlg.Destory()
 			return;
 
+		self.logPanel.Append(u'解压文件[' + srcFile + ']\n')
 		try:
 			tar = tarfile.open(srcFile)
 			names = tar.getnames()
 			for name in names:
+				self.logPanel.Append(name + '\n')
 				tar.extract(name, targetDir)
 			tar.close()
 		except ExtractError, e:
 			print e
 			self.showMessageBox(u'tar包解压失败', u'错误')
+
+	def SetLogPanel(self,logPanel):
+		self.logPanel = logPanel
+
 
 if __name__ == '__main__':
 	app = wx.App(False)

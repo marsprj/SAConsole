@@ -6,6 +6,7 @@ import logging
 from PanelConfig import ConfigPanel
 from PanelRun import RunPanel
 from PanelResult import ResultPanel
+from PanelLog import LogPanel
 from FrmInstall import FrmInstall
 from FrmDataCopy import FrmDataCopy
 
@@ -86,8 +87,10 @@ class FrmMain(wx.Frame):
 #		dlg.Destroy()
 
 	def onCopyData(self, event):
+		self.ShowPanel(1)
 		#self.ShowPanel(1)
 		frm = FrmDataCopy(self)
+		frm.SetLogPanel(self.GetPanel(1))
 		frm.Centre()
 		frm.Show(True)
 
@@ -105,11 +108,13 @@ class FrmMain(wx.Frame):
 		self.ShowPanel(5)
 
 	def InitPanels(self, parent, hbox):
-		p1 = wx.Panel(parent)
-		p2 = ConfigPanel(parent)
-		p3 = RunPanel(parent)
-		p4 = ResultPanel(parent)
-		self.panels = [p1, None, p2, p3, p4]
+		#p1 = wx.Panel(parent)
+		p1 = LogPanel(parent)
+		p2 = LogPanel(parent)
+		p3 = ConfigPanel(parent)
+		p4 = RunPanel(parent)
+		p5 = ResultPanel(parent)
+		self.panels = [p1,p2, p3, p4, p5]
 		for p in self.panels:
 			if(p!=None):
 				hbox.Add(p, proportion=1, flag=wx.EXPAND)
@@ -126,6 +131,11 @@ class FrmMain(wx.Frame):
 				p.Show(True)
 				self.hbox_main.Layout()
 
+	def GetPanel(self, index):
+		print len(self.panels)
+		if(index<len(self.panels)):
+			return self.panels[index]
+		return None
 
 if __name__ == '__main__':
 	app = wx.App()

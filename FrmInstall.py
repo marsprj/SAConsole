@@ -8,7 +8,7 @@ import SAConfig
 
 class FrmInstall(wx.Frame):
 	def __init__(self, parent):
-		wx.Frame.__init__(self, parent, title=u'拷贝数据',size=(500,170),style=wx.DEFAULT_FRAME_STYLE^(wx.RESIZE_BORDER|wx.MINIMIZE_BOX|wx.MAXIMIZE_BOX))
+		wx.Frame.__init__(self, parent, title=u'拷贝数据',size=(500,170),style=(wx.DEFAULT_FRAME_STYLE|wx.FRAME_NO_TASKBAR)^(wx.RESIZE_BORDER|wx.MINIMIZE_BOX|wx.MAXIMIZE_BOX))
 
 		panel = wx.Panel(self)
 
