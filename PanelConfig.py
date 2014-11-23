@@ -10,7 +10,14 @@ class ConfigPanel(wx.Panel):
 		wx.Panel.__init__(self, parent, ID, pos, size, wx.NO_BORDER, label)
 
 		self.config_path = ''
-		self.config_dir = os.path.join(SAConfig.GetValue('sa_home'), 'conf')
+		#self.sa_dir = os.path.join(SAConfig.GetValue('sa_home'), 'conf')
+
+		self.sa_home = SAConfig.GetValue('sa_home')
+		self.sa_name = SAConfig.GetValue('sa_name')
+		self.sa_base = os.path.join(self.sa_home, self.sa_name)
+		self.sa_dir  = os.path.join(self.sa_base, 'srgtools')
+		#self.sa_exe  = os.path.join(self.sa_dir, 'SurrogateTools.jar')
+		self.sa_log  = os.path.join(self.sa_dir, 'srg_grid.log')
 
 		vbox = wx.BoxSizer(wx.VERTICAL)
 		
@@ -110,7 +117,7 @@ class ConfigPanel(wx.Panel):
 		
 
 	def buildConconfig_path(self, conf_name):
-		return os.path.join(self.config_dir, conf_name)
+		return os.path.join(self.sa_dir, conf_name)
 
 	def showMessageBox(self, message, title):
 		dlg = wx.MessageDialog(self, message, title, wx.OK)
