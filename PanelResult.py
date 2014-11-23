@@ -8,68 +8,103 @@ import SAConfig
 
 class ResultPanel(wx.Panel):
 
-	def __init__(self, parent, ID=-1, label=u'SA运行程序', pos=wx.DefaultPosition, size=(100, 25)): 
+	def __init__(self, parent, ID=-1, label=u'运行结果', pos=wx.DefaultPosition, size=(100, 25)): 
 		wx.Panel.__init__(self, parent, ID, pos, size, wx.NO_BORDER, label)
 		self.initUI()
 
 	def initUI(self):
 
 		self.sa_home = SAConfig.GetValue('sa_home')
-		self.sa_dir  = self.sa_home
-		self.sa_exe  = os.path.join(self.sa_dir, 'SurrogateTools.jar')
-		self.sa_log  = os.path.join(self.sa_dir, 'srg_grid.log')
+		self.sa_out  = os.path.join(self.sa_home, 'output/somegrid')
+		#self.sa_out  = 'g:\\'
+		#self.sa_out  = 'G:\\Software\\Tool'
+		#self.sa_out  = 'E:\\Research\\SAConsole\\v-0.0.3'
+		#self.sa_out  = 'G:\\temp'
 		
 		vbox = wx.BoxSizer(wx.VERTICAL)
 
 		hbox1 = wx.BoxSizer(wx.HORIZONTAL)
-		st1 = wx.StaticText(self,label=u'程序')
+		st1 = wx.StaticText(self,label=u'运行结果路径')
 		#st1.SetFont(font)
 
 		hbox1.Add(st1,flag=wx.RIGHT,border=8)
 		txtPath = wx.TextCtrl(self,style=wx.TE_READONLY)
 		txtPath.SetBackgroundColour('#FFFFFF')
-		txtPath.SetValue(self.sa_exe)
+		txtPath.SetValue(self.sa_out)
 		hbox1.Add(txtPath,proportion=1)		
 		vbox.Add(hbox1,flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
 
-		btn = wx.Button(self, -1, u"运行")
-		self.Bind(wx.EVT_BUTTON, self.OnRun, btn)
-		hbox1.Add(btn, flag=wx.LEFT|wx.RIGHT,border=10)
-
-		btn = wx.Button(self, -1, u"日志")
-		self.Bind(wx.EVT_BUTTON, self.OnLog, btn)
+		btn = wx.Button(self, -1, u"刷新")
+		self.Bind(wx.EVT_BUTTON, self.OnRefresh, btn)
 		hbox1.Add(btn, flag=wx.LEFT|wx.RIGHT,border=10)
 
 		vbox.Add((-1,10))
 
 		hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-		self.txtLog = wx.TextCtrl(self, style=wx.TE_MULTILINE|wx.HSCROLL|wx.TE_MULTILINE)
-		self.txtLog.SetBackgroundColour('#FFFFFF')
-		hbox3.Add(self.txtLog, proportion=1, flag=wx.EXPAND)
+
+		self.treeCtrl = wx.TreeCtrl(self, -1, style=wx.TR_HAS_BUTTONS|wx.TR_DEFAULT_STYLE|wx.SUNKEN_BORDER)
+		self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivated, self.treeCtrl)
+		self.InitTree(self.treeCtrl)		
+		hbox3.Add(self.treeCtrl, proportion=1, flag=wx.EXPAND)
+
+		self.contentCtrl = wx.TextCtrl(self, style=wx.TE_MULTILINE)
+		hbox3.Add(self.contentCtrl,proportion=4, flag=wx.EXPAND)	
 		vbox.Add(hbox3, proportion=1, flag=wx.LEFT|wx.RIGHT|wx.EXPAND, border=10)
 
 		vbox.Add((-1, 25))
 		self.SetSizer(vbox)
-		self.timer = wx.Timer(self)
-		self.Bind(wx.EVT_TIMER, self.onReadLog, self.timer)
+		
+	def InitTree(self, treeCtrl):
+		il = wx.ImageList(16,16)
+		il.Add(wx.Bitmap('images/folder.png', wx.BITMAP_TYPE_PNG))
+		il.Add(wx.Bitmap('images/file_white.png', wx.BITMAP_TYPE_PNG))
+		treeCtrl.AssignImageList(il)
 
-	def OnRun(self, event):
-		self.timer.Start(10*1000)
-		exe_cmd  = 'java -classpath ' + self.sa_exe + ' gov.epa.surrogate.SurrogateTool control_variables_grid.csv'
-		os.open(exe_cmd)
-		self.timer.Stop()
+		self.treeRoot = treeCtrl.AddRoot(u'输出数据')
+		treeCtrl.SetItemImage(self.treeRoot, 0, wx.TreeItemIcon_Normal)
 
-	def OnLog(self, event):
-		self.timer.Stop()
+		self.UpdateTreeNode(self.treeRoot, self.sa_out)
 
-	def onReadLog(self, event):
-		try:
-			fp = open(self.sa_log)
-			text = fp.read()
-			self.txtLog.SetValue(text)
-		except IOError,e:
-			logging.error(e)
-		finally:
-			if(fp!=None):
-				fp.close()
+		treeCtrl.ExpandAll()
+
+
+	def UpdateTreeNode(self, tnode, path):
+		self.treeCtrl.DeleteChildren(tnode)
+		files = os.listdir(path)
+		for fn in files:
+			fp = os.path.join(path, fn)
+			tn = self.treeCtrl.AppendItem(tnode, fn)
+			#self.treeCtrl.SetItemData(tn, fp)
+			if(os.path.isdir(fp)):
+				self.treeCtrl.SetItemImage(tn, 0, wx.TreeItemIcon_Normal)
+			else:
+				self.treeCtrl.SetItemImage(tn, 1, wx.TreeItemIcon_Normal)
+
+	def OnRefresh(self, event):
+		pass
+
+	def OnActivated(self, event):
+		item = event.GetItem()
+		fname = self.treeCtrl.GetItemText(item)
+		fpath = os.path.join(self.sa_out, fname)
+		if(os.path.isfile(fpath)):
+			(fdir,fext) = os.path.splitext(fpath)
+			if((fext=='.txt')|(fext=='.xml')):
+				fp = None
+				try:
+					fp = open(fpath)
+					text = fp.read()
+					self.contentCtrl.SetValue(text)
+					pass
+				except IOError, e:
+					logging.error(e)
+					raise
+				else:
+					pass
+				finally:
+					if(fp!=None):
+						fp.close()
+
+
+	
 

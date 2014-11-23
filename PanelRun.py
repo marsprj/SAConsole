@@ -46,7 +46,7 @@ class RunPanel(wx.Panel):
 		hbox1.Add(btn, flag=wx.LEFT|wx.RIGHT,border=10)
 
 		btn = wx.Button(self, -1, u"日志")
-		self.Bind(wx.EVT_BUTTON, self.OnLog, btn)
+		self.Bind(wx.EVT_BUTTON, self.onReadLog, btn)
 		hbox1.Add(btn, flag=wx.LEFT|wx.RIGHT,border=10)
 
 		vbox.Add((-1,10))
