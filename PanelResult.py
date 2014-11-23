@@ -89,7 +89,7 @@ class ResultPanel(wx.Panel):
 		fpath = os.path.join(self.sa_out, fname)
 		if(os.path.isfile(fpath)):
 			(fdir,fext) = os.path.splitext(fpath)
-			if((fext=='.txt')|(fext=='.xml')):
+			if((fext=='.txt')|(fext=='.csv')|(fext=='.log')):
 				fp = None
 				try:
 					fp = open(fpath)
