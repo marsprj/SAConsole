@@ -14,8 +14,13 @@ class ResultPanel(wx.Panel):
 
 	def initUI(self):
 
-		self.sa_home = SAConfig.GetValue('sa_home')
-		self.sa_out  = os.path.join(self.sa_home, 'output/somegrid')
+		self.sa_home = SAConfig.GetValue('sa_home')		
+		self.sa_name = SAConfig.GetValue('sa_name')
+		self.sa_base = os.path.join(self.sa_home, self.sa_name)
+		self.sa_out  = os.path.join(self.sa_base, 'output/somegrid')
+
+		print self.sa_out
+
 		#self.sa_out  = 'g:\\'
 		#self.sa_out  = 'G:\\Software\\Tool'
 		#self.sa_out  = 'E:\\Research\\SAConsole\\v-0.0.3'
@@ -70,16 +75,20 @@ class ResultPanel(wx.Panel):
 
 	def UpdateTreeNode(self, tnode, path):
 		self.treeCtrl.DeleteChildren(tnode)
-		files = os.listdir(path)
-		for fn in files:
-			fp = os.path.join(path, fn)
-			tn = self.treeCtrl.AppendItem(tnode, fn)
-			#self.treeCtrl.SetItemData(tn, fp)
-			if(os.path.isdir(fp)):
-				self.treeCtrl.SetItemImage(tn, 0, wx.TreeItemIcon_Normal)
-			else:
-				self.treeCtrl.SetItemImage(tn, 1, wx.TreeItemIcon_Normal)
+		try:
+			files = os.listdir(path)
+			for fn in files:
+				fp = os.path.join(path, fn)
+				tn = self.treeCtrl.AppendItem(tnode, fn)
+				#self.treeCtrl.SetItemData(tn, fp)
+				if(os.path.isdir(fp)):
+					self.treeCtrl.SetItemImage(tn, 0, wx.TreeItemIcon_Normal)
+				else:
+					self.treeCtrl.SetItemImage(tn, 1, wx.TreeItemIcon_Normal)
+		finally:
+			pass
 
+		
 	def OnRefresh(self, event):
 		pass
 
