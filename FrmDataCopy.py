@@ -167,7 +167,7 @@ class FrmDataCopy(wx.Frame):
 			msg = u'文件 ['+ srcFile+u'] 不存在';
 			dlg = wx.MessageDialog( self, msg, u'警告', wx.OK)
 			dlg.ShowModal()
-			dlg.Destory()
+			#dlg.Destory()
 			return;
 
 		self.logPanel.Append(u'解压文件[' + srcFile + ']\n')

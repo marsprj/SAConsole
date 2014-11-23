@@ -22,6 +22,7 @@ class LogPanel(wx.Panel):
 
 	def Append(self, text):
 		self.logCtrl.AppendText(text)
+		logging.info(text)
 
 	def Clear(self):
 		self.logCtrl.Clear()
