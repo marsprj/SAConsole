@@ -74,6 +74,8 @@ class FrmMain(wx.Frame):
 
 	def onInstall(self, event):
 
+		self.ShowPanel(1)
+
 		frm = FrmInstall(self)
 		frm.SetLogPanel(self.GetPanel(0))
 		frm.Centre()

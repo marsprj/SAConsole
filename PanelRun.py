@@ -63,6 +63,9 @@ class RunPanel(wx.Panel):
 		self.Bind(wx.EVT_TIMER, self.onReadLog, self.timer)
 
 	def OnRun(self, event):
+		
+		os.remove(self.sa_log)		
+
 		self.timer.Start(10*1000)
 		#exe_cmd  = 'java -classpath ' + self.sa_exe + ' gov.epa.surrogate.SurrogateTool control_variables_grid.csv'
 		exe_cmd  = 'cd ' + self.sa_dir  + ';java -classpath SurrogateTools.jar gov.epa.surrogate.SurrogateTool control_variables_grid.csv'
