@@ -68,23 +68,25 @@ class ResultPanel(wx.Panel):
 		self.treeRoot = treeCtrl.AddRoot(u'输出数据')
 		treeCtrl.SetItemImage(self.treeRoot, 0, wx.TreeItemIcon_Normal)
 
-		self.UpdateTreeNode(self.treeRoot, self.sa_out)
+	def UpdateTree(self):
 
-		treeCtrl.ExpandAll()
+		self.UpdateTreeNode(self.treeRoot, self.sa_out)
+		self.treeCtrl.ExpandAll()
 
 
 	def UpdateTreeNode(self, tnode, path):
 		self.treeCtrl.DeleteChildren(tnode)
 		try:
-			files = os.listdir(path)
-			for fn in files:
-				fp = os.path.join(path, fn)
-				tn = self.treeCtrl.AppendItem(tnode, fn)
-				#self.treeCtrl.SetItemData(tn, fp)
-				if(os.path.isdir(fp)):
-					self.treeCtrl.SetItemImage(tn, 0, wx.TreeItemIcon_Normal)
-				else:
-					self.treeCtrl.SetItemImage(tn, 1, wx.TreeItemIcon_Normal)
+			if(os.path.exists(path)):
+				files = os.listdir(path)
+				for fn in files:
+					fp = os.path.join(path, fn)
+					tn = self.treeCtrl.AppendItem(tnode, fn)
+					#self.treeCtrl.SetItemData(tn, fp)
+					if(os.path.isdir(fp)):
+						self.treeCtrl.SetItemImage(tn, 0, wx.TreeItemIcon_Normal)
+					else:
+						self.treeCtrl.SetItemImage(tn, 1, wx.TreeItemIcon_Normal)
 		finally:
 			pass
 

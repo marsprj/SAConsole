@@ -19,10 +19,16 @@ class LogPanel(wx.Panel):
 
 		self.SetSizer(vbox)
 
+	def SetText(self, text):
+		self.logCtrl.SetValue(text)
 
 	def Append(self, text):
 		self.logCtrl.AppendText(text)
 		logging.info(text)
+
+	def AppendTexts(self, texts):
+		for t in texts:
+			self.logCtrl.AppendText(t)
 
 	def Clear(self):
 		self.logCtrl.Clear()

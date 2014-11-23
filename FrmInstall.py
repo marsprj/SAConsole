@@ -8,7 +8,7 @@ import SAConfig
 
 class FrmInstall(wx.Frame):
 	def __init__(self, parent):
-		wx.Frame.__init__(self, parent, title=u'拷贝数据',size=(500,170),style=(wx.DEFAULT_FRAME_STYLE|wx.FRAME_NO_TASKBAR)^(wx.RESIZE_BORDER|wx.MINIMIZE_BOX|wx.MAXIMIZE_BOX))
+		wx.Frame.__init__(self, parent, title=u'安装程序',size=(500,170),style=(wx.DEFAULT_FRAME_STYLE|wx.FRAME_NO_TASKBAR)^(wx.RESIZE_BORDER|wx.MINIMIZE_BOX|wx.MAXIMIZE_BOX))
 
 		panel = wx.Panel(self)
 
@@ -46,6 +46,28 @@ class FrmInstall(wx.Frame):
 		dlg.Destroy()
 
 	def onInstall(self, event):
+	
+		self.logPanel.Clear()
+		
+		self.logPanel.SetText(u'安装tcsh\n')	
+		cmd = 'yum install tcsh.i686 -y'
+		lines = os.popen(cmd).readlines()
+		self.logPanel.AppendTexts(lines)
+
+		self.logPanel.Append(u'安装wxPython\n')	
+		cmd = 'yum install wxPython.i686 -y'
+		lines = os.popen(cmd).readlines()
+		self.logPanel.AppendTexts(lines)
+
+		sa_home_dir = os.path.join(self.sa_home, SAConfig.GetValue('sa_name'))
+		self.logPanel.Append(u'设置SA_HOME环境变量\n')
+		self.logPanel.Append('SA_HOME=' + sa_home_dir + '\n')
+		cmd = 'sed -i "/^SA_HOME/d" ~/.cshrc'
+		lines = os.popen(cmd).readlines()
+		cmd = 'echo "SA_HOME=' + sa_home_dir + '" >> ~/.cshrc'
+		lines = os.popen(cmd).readlines()
+		self.logPanel.AppendTexts(lines)
+
 		# check whether tar file exists
 		if(os.path.isfile(self.tar_path)==False):
 			self.showMessageBox(u'安装文件 ['+self.tar_path+u'] 不存在', u'警告')
@@ -55,7 +77,6 @@ class FrmInstall(wx.Frame):
 			self.showMessageBox(u'目录 ['+self.sa_home+u'] 不存在', u'警告')
 			return;
 
-		self.logPanel.Clear()
 		self.logPanel.Append(u'解压文件[' + self.tar_path + ']\n')
 		try:
 			tar = tarfile.open(self.tar_path)
