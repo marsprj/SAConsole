@@ -141,11 +141,3 @@ class FrmMain(wx.Frame):
 		if(index<len(self.panels)):
 			return self.panels[index]
 		return None
-
-if __name__ == '__main__':
-	app = wx.App()
-	frmMain = FrmMain(None)
-	frmMain.Show(True)
-	frmMain.Maximize(True)
-	frmMain.Centre()
-	app.MainLoop()

@@ -24,7 +24,3 @@ def SetValue(key, value):
 	rcp.set('global', key, value)
 	with open(cn, 'wb') as configfile:
 		rcp.write(configfile)
-
-if __name__ == '__main__':
-	print GetValue('sa_home')
-	SetValue('sa_home','G:\\temp')

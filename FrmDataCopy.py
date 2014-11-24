@@ -106,41 +106,6 @@ class FrmDataCopy(wx.Frame):
 		dlg.ShowModal()
 		dlg.Destroy()
 
-#	def onCopy(self, event):
-#		self.srcFile = self.txtSrc.GetValue();
-#		logging.error(self.srcFile);
-#		if(os.path.isfile(self.srcFile)==False):
-#			msg = u'文件 ['+self.srcFile+u'] 不存在';
-#			dlg = wx.MessageDialog( self, msg, u'警告', wx.OK)
-#			dlg.ShowModal()
-#			dlg.Destory()
-#			return;
-#		
-#		if(os.path.isfile(self.srcFile)==False):
-#			msg = u'目录 ['+self.srcFile+u'] 不存在';
-#			dlg = wx.MessageDialog( self, msg, u'警告', wx.OK)
-#			dlg.ShowModal()
-#			dlg.Destory()
-#			return;
-#
-#		#shutil.copy(self.srcFile, self.desFold)
-#		print '...............................'
-#		try:
-#			print self.srcFile
-#			tar = tarfile.open(self.srcFile)
-#			names = tar.getnames()
-#			for name in names:
-#				tar.extract(name, self.desFold)
-#			
-#			tar.close()
-#
-#			#self.setSaHomeEnv(self.sa_home)
-#
-#			self.showMessageBox(u'安装完成', u'提示')
-#		except ExtractError, e:
-#			print "ExtractError e"
-#			self.showMessageBox(u'tar包解压失败', u'错误')
-
 	def onCopy(self, event):
 		
 		if(os.path.isdir(self.desFold)==False):
@@ -185,9 +150,3 @@ class FrmDataCopy(wx.Frame):
 	def SetLogPanel(self,logPanel):
 		self.logPanel = logPanel
 
-
-if __name__ == '__main__':
-	app = wx.App(False)
-	mainWin = FrmDataCopy(None)
-	mainWin.Show(True)
-	app.MainLoop()
