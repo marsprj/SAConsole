@@ -6,9 +6,13 @@ import shutil
 import tarfile
 import SAConfig
 
+
+
 class FrmInstall(wx.Frame):
 	def __init__(self, parent):
 		wx.Frame.__init__(self, parent, title=u'安装程序',size=(500,170),style=(wx.DEFAULT_FRAME_STYLE|wx.FRAME_NO_TASKBAR)^(wx.RESIZE_BORDER|wx.MINIMIZE_BOX|wx.MAXIMIZE_BOX))
+
+		self.parent = parent
 
 		panel = wx.Panel(self)
 
@@ -70,11 +74,11 @@ class FrmInstall(wx.Frame):
 
 		# check whether tar file exists
 		if(os.path.isfile(self.tar_path)==False):
-			self.showMessageBox(u'安装文件 ['+self.tar_path+u'] 不存在', u'警告')
+			self.ShowMessageBox(u'安装文件 ['+self.tar_path+u'] 不存在', u'警告')
 			return;
 
 		if(os.path.isdir(self.sa_home)==False):
-			self.showMessageBox(u'目录 ['+self.sa_home+u'] 不存在', u'警告')
+			self.ShowMessageBox(u'目录 ['+self.sa_home+u'] 不存在', u'警告')
 			return;
 
 		self.logPanel.Append(u'解压文件[' + self.tar_path + ']\n')
@@ -82,25 +86,25 @@ class FrmInstall(wx.Frame):
 			tar = tarfile.open(self.tar_path)
 			names = tar.getnames()
 			for name in names:
-				self.logPanel.Append(name + '\n')
+				self.logPanel.Append(name)
 				tar.extract(name, self.sa_home)
 			
 			tar.close()
 
-			self.setSaHomeEnv(self.sa_home)
+			self.SetSaHomeEnv(self.sa_home)
 
-			self.showMessageBox(u'安装完成', u'提示')
+			self.ShowMessageBox(u'安装完成', u'提示')
 		except ExtractError, e:
 			print "ExtractError e"
-			self.showMessageBox(u'tar包解压失败', u'错误')
+			self.ShowMessageBox(u'tar包解压失败', u'错误')
 		
 
-	def showMessageBox(self, message, title):
+	def ShowMessageBox(self, message, title):
 		dlg = wx.MessageDialog(self, message, title, wx.OK)
 		dlg.ShowModal()
 		dlg.Destroy()
 
-	def setSaHomeEnv(self, sa_home):
+	def SetSaHomeEnv(self, sa_home):
 		pass
 
 	def SetLogPanel(self,logPanel):

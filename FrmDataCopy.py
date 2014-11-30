@@ -122,7 +122,7 @@ class FrmDataCopy(wx.Frame):
 		self.CopyData(self.srcFile3, self.desFold)
 		self.CopyData(self.srcFile4, self.desFold)
 
-		self.showMessageBox(u'安装完成', u'提示')
+		self.showMessageBox(u'数据复制完成', u'提示')
 		
 
 	def CopyData(self, srcFile, targetDir):

@@ -74,10 +74,13 @@ class FrmMain(wx.Frame):
 
 	def onInstall(self, event):
 
-		self.ShowPanel(1)
+		self.ShowPanel(0)
+
+		logPanel = self.GetPanel(0)
+		logPanel.Append("uiiyjghrgf")
 
 		frm = FrmInstall(self)
-		frm.SetLogPanel(self.GetPanel(0))
+		frm.SetLogPanel(logPanel)
 		frm.Centre()
 		frm.Show(True)
 #		dlg = InstallDialog()
@@ -119,7 +122,7 @@ class FrmMain(wx.Frame):
 		p3 = ConfigPanel(parent)
 		p4 = RunPanel(parent)
 		p5 = ResultPanel(parent)
-		self.panels = [p1,p2, p3, p4, p5]
+		self.panels = [p1, p2, p3, p4, p5]
 		for p in self.panels:
 			if(p!=None):
 				hbox.Add(p, proportion=1, flag=wx.EXPAND)
