@@ -64,21 +64,25 @@ class RunPanel(wx.Panel):
 
 	def OnRun(self, event):
 		
-		os.remove(self.sa_log)		
+		#os.remove(self.sa_log)		
 
-		self.timer.Start(10*1000)
-		#exe_cmd  = 'java -classpath ' + self.sa_exe + ' gov.epa.surrogate.SurrogateTool control_variables_grid.csv'
+		self.timer.Start(3*1000)
+		exe_cmd  = 'java -classpath ' + self.sa_exe + ' gov.epa.surrogate.SurrogateTool control_variables_grid.csv'
 		exe_cmd  = 'cd ' + self.sa_dir  + ';java -classpath SurrogateTools.jar gov.epa.surrogate.SurrogateTool control_variables_grid.csv'
-		print exe_cmd
-		os.popen(exe_cmd)
-		self.timer.Stop()
+		#print exe_cmd
+		#os.popen(exe_cmd)
+		#self.timer.Stop()
+
+		self.thread = RunThread(exe_cmd)
+		self.thread.start()
 
 	def OnLog(self, event):
 		self.timer.Stop()
 
 	def onReadLog(self, event):
 		try:
-			fp = open(self.sa_log)
+			#fp = open(self.sa_log)
+			fp = open("G:\\temp\\log.txt")
 			text = fp.read()
 			self.txtLog.SetValue(text)
 		except IOError,e:
@@ -86,4 +90,7 @@ class RunPanel(wx.Panel):
 		finally:
 			if(fp!=None):
 				fp.close()
+
+	def WriteLog(self, message):
+		pass
 

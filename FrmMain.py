@@ -77,7 +77,7 @@ class FrmMain(wx.Frame):
 		self.ShowPanel(0)
 
 		logPanel = self.GetPanel(0)
-		
+
 		frm = FrmInstall(self)
 		frm.SetLogPanel(logPanel)
 		frm.Centre()
@@ -113,6 +113,13 @@ class FrmMain(wx.Frame):
 
 	def onLog(self, event):
 		self.ShowPanel(5)
+		fp = open('g:/temp/log.txt', 'w')
+		for i in range(0,1000):
+			for j in range(0,1000000):
+				pass
+			fp.write("@@@@@@@@@@@@@@@@@@@@@@@@@@@@2222\n")
+			fp.flush()
+		fp.close()
 
 	def InitPanels(self, parent, hbox):
 		#p1 = wx.Panel(parent)
