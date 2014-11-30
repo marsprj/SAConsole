@@ -77,8 +77,7 @@ class FrmMain(wx.Frame):
 		self.ShowPanel(0)
 
 		logPanel = self.GetPanel(0)
-		logPanel.Append("uiiyjghrgf")
-
+		
 		frm = FrmInstall(self)
 		frm.SetLogPanel(logPanel)
 		frm.Centre()

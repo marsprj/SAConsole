@@ -99,7 +99,7 @@ class FrmInstall(wx.Frame):
 #			print "ExtractError e"
 #			self.ShowMessageBox(u'tar包解压失败', u'错误')
 
-		self.thread = UntarThread(self.tar_path,self.sa_home,self.logPanel)
+		self.thread = UntarThread(self.tar_path,self.sa_home,self, self.logPanel)
 		self.thread.start()
 		
 
@@ -107,6 +107,11 @@ class FrmInstall(wx.Frame):
 		dlg = wx.MessageDialog(self, message, title, wx.OK)
 		dlg.ShowModal()
 		dlg.Destroy()
+
+	def ShowFinishBox(self, message):
+		dlg = wx.MessageDialog(self, u'安装完成', u'提示', wx.OK)
+		dlg.ShowModal()
+		dlg.Destroy()		
 
 	def SetSaHomeEnv(self, sa_home):
 		pass
