@@ -5,6 +5,7 @@ import os
 import sys
 import logging
 import SAConfig
+from RunThread import RunThread
 
 class RedirectText(object):
 	def __init__(self,aWxTextCtrl):
@@ -73,23 +74,33 @@ class RunPanel(wx.Panel):
 		#os.popen(exe_cmd)
 		#self.timer.Stop()
 
-		self.thread = RunThread(exe_cmd)
+		self.thread = RunThread(exe_cmd, self)
 		self.thread.start()
 
 	def OnLog(self, event):
 		self.timer.Stop()
 
 	def onReadLog(self, event):
+		#print '[log path]:' + self.sa_log +'\n'
 		try:
-			#fp = open(self.sa_log)
-			fp = open("G:\\temp\\log.txt")
+			fp = open(self.sa_log)
 			text = fp.read()
 			self.txtLog.SetValue(text)
+			pos = self.txtLog.XYToPosition(0,self.txtLog.GetNumberOfLines()-1)
+			self.txtLog.ShowPosition(pos)
 		except IOError,e:
 			logging.error(e)
 		finally:
 			if(fp!=None):
 				fp.close()
+
+	def OnRunFinish(self, message):
+		self.timer.Stop()
+
+		dlg = wx.MessageDialog(self, u'运行结束', u'提示', wx.OK)
+		dlg.ShowModal()
+		dlg.Destroy()
+	
 
 	def WriteLog(self, message):
 		pass
