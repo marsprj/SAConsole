@@ -9,6 +9,7 @@ from PanelResult import ResultPanel
 from PanelLog import LogPanel
 from FrmInstall import FrmInstall
 from FrmDataCopy import FrmDataCopy
+from FrmCopyFolder import FrmCopyFolder
 
 class FrmMain(wx.Frame):
 	def __init__(self, parent):
@@ -46,10 +47,10 @@ class FrmMain(wx.Frame):
 		self.Bind(wx.EVT_BUTTON, self.onResult, btn)
 		hbox_bar.Add(btn, 1, wx.EXPAND)
 		#u"查看日志"
-		bmp =  wx.Image('images/06.png', wx.BITMAP_TYPE_PNG).ConvertToBitmap()
-		btn = wx.BitmapButton(panel, -1, bmp)
-		self.Bind(wx.EVT_BUTTON, self.onLog, btn)
-		hbox_bar.Add(btn, 1, wx.EXPAND)
+		#bmp =  wx.Image('images/06.png', wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+		#btn = wx.BitmapButton(panel, -1, bmp)
+		#self.Bind(wx.EVT_BUTTON, self.onLog, btn)
+		#hbox_bar.Add(btn, 1, wx.EXPAND)
 
  		vbox.Add(hbox_bar,flag=wx.LEFT|wx.RIGHT|wx.TOP,border=3)
 		vbox.Add((-1,5))
@@ -94,7 +95,7 @@ class FrmMain(wx.Frame):
 	def onCopyData(self, event):
 		self.ShowPanel(1)
 		#self.ShowPanel(1)
-		frm = FrmDataCopy(self)
+		frm = FrmCopyFolder(self)
 		frm.SetLogPanel(self.GetPanel(1))
 		frm.Centre()
 		frm.Show(True)
@@ -112,14 +113,7 @@ class FrmMain(wx.Frame):
 		self.ShowPanel(4)
 
 	def onLog(self, event):
-		self.ShowPanel(5)
-		fp = open('g:/temp/log.txt', 'w')
-		for i in range(0,1000):
-			for j in range(0,1000000):
-				pass
-			fp.write("@@@@@@@@@@@@@@@@@@@@@@@@@@@@2222\n")
-			fp.flush()
-		fp.close()
+		pass
 
 	def InitPanels(self, parent, hbox):
 		#p1 = wx.Panel(parent)

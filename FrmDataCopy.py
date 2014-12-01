@@ -42,7 +42,6 @@ class FrmDataCopy(wx.Frame):
 		self.txtData3.SetBackgroundColour('#FFFFFF')
 		btnSrc = wx.Button(panel, label=u'选择文件', pos=(460,95), size=(80,30))
 		self.Bind(wx.EVT_BUTTON, self.onChoosFile3, btnSrc)
-		#self.txtSrc.SetValue(self.srcFile);
 
 		# Choose Source File
 		wx.StaticText(panel, label=u'beld3_data:', pos=(20,140))
@@ -50,8 +49,6 @@ class FrmDataCopy(wx.Frame):
 		self.txtData4.SetBackgroundColour('#FFFFFF')
 		btnSrc = wx.Button(panel, label=u'选择文件', pos=(460,135), size=(80,30))
 		self.Bind(wx.EVT_BUTTON, self.onChoosFile4, btnSrc)
-		#self.txtSrc.SetValue(self.srcFile);
-
 
 		# Choose Target Folder
 		wx.StaticText(panel, label=u'目标路径:', pos=(20,190))
