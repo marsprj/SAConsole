@@ -17,12 +17,19 @@ class FrmCopyFolder(wx.Frame):
 
 		panel = wx.Panel(self)
 
-		self.des_dir = SAConfig.GetValue('sa_home')
+		self.sa_home = SAConfig.GetValue('sa_home')
+		self.sa_name = SAConfig.GetValue('sa_name')
+		self.sa_base = os.path.join(self.sa_home, self.sa_name)
+		self.sa_data  = os.path.join(self.sa_base, 'data')
+
+		self.des_dir = self.sa_data
 		self.src_dir = SAConfig.GetValue('sa_home')
+
 
 		wx.StaticText(panel,label=u'目标目录:', pos=(20,20))
 		self.txtDesFolder = wx.TextCtrl(panel, pos=(90,18), size=(300,25), style=wx.TE_READONLY)
 		self.txtDesFolder.SetBackgroundColour('#FFFFFF')
+		self.txtDesFolder.SetValue(self.sa_data);
 		bmp =  wx.Image('images/folder_24.png', wx.BITMAP_TYPE_PNG).ConvertToBitmap()
 		#btnSrcFolder = wx.Button(panel, label=u'数据目录', pos=(400,15), size=(80,30))
 		btnDesFolder = wx.BitmapButton(panel, id=-1, pos=(400,15), bitmap=bmp, size=wx.DefaultSize, style=wx.BU_AUTODRAW, validator=wx.DefaultValidator, name=u'数据目录')
