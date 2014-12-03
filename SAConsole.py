@@ -5,13 +5,13 @@ from FrmMain import FrmMain
 
 class SApp(wx.App):
 	def OnInit(self):
-		bmp = wx.Image("images/Hydrangeas.jpg").ConvertToBitmap()
-		wx.SplashScreen(bmp,
-						wx.SPLASH_CENTER_ON_SCREEN | wx.SPLASH_TIMEOUT,
-						1000,
-						None,
-						-1)
-		wx.Yield()
+		#bmp = wx.Image("images/Hydrangeas.jpg").ConvertToBitmap()
+		#wx.SplashScreen(bmp,
+		#				wx.SPLASH_CENTER_ON_SCREEN | wx.SPLASH_TIMEOUT,
+		#				1000,
+		#				None,
+		#				-1)
+		#wx.Yield()
 		frmMain = FrmMain(None)  
 		frmMain.Show(True) 
 		frmMain.Centre()
