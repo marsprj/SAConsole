@@ -82,6 +82,7 @@ class RunPanel(wx.Panel):
 
 	def onReadLog(self, event):
 		#print '[log path]:' + self.sa_log +'\n'
+		fp = None
 		try:
 			fp = open(self.sa_log)
 			text = fp.read()
