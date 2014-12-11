@@ -109,7 +109,7 @@ class FrmMain(wx.Frame):
 
 	def onResult(self, event):
 		p = self.GetPanel(4)
-		p.UpdateTree()
+		p.Update()
 		self.ShowPanel(4)
 
 	def onLog(self, event):
