@@ -17,9 +17,11 @@ class ResultPanel(wx.Panel):
 		self.sa_home = SAConfig.GetValue('sa_home')		
 		self.sa_name = SAConfig.GetValue('sa_name')
 		self.sa_base = os.path.join(self.sa_home, self.sa_name)
-		self.sa_out  = os.path.join(self.sa_base, 'output/somegrid')
+		self.sa_dir  = os.path.join(self.sa_base, 'srgtools')
+		#self.sa_out  = os.path.join(self.sa_base, 'output/somegrid')
+		slef.sa_out = self.GetOutputDir()
 
-		print self.sa_out
+		#print self.sa_out
 
 		#self.sa_out  = 'g:\\'
 		#self.sa_out  = 'G:\\Software\\Tool'
@@ -116,6 +118,62 @@ class ResultPanel(wx.Panel):
 					if(fp!=None):
 						fp.close()
 
+	def GetOutputDir(self):
+		config_sub_dir = self.GetOutputSubDir()
 
+		dcount = self.GetDotCount(config_sub_dir)
+		print dcount
+
+		rdir1 = self.ResetDir1(self.sa_dir, dcount)
+		print rdir1
+
+		rdir2 = self.ResetDir2(config_sub_dir)
+		print rdir2
+
+		return os.path.join(self.sa_dir, config_sub_dir)
+
+	def GetOutputSubDir(self):
+		config_path = os.path.join(self.sa_dir, control_variables_grid.csv)
+		f = None
+		try:
+			f = open(config_path):
+			for line in f.readlines():
+				strs = line.split(',')
+					if strs[0] == 'OUTPUT DIRECTORY':
+						return strs[0]
+						break
+		finally:
+			if f!=None:
+				f.close()
 	
 
+	def ResetDir1(self, dir1, fcount):
+		strs = dir1.split('/')
+		slen = len(strs)
+		if strs[slen-1]=='':
+			c = fcount+1
+		else:
+			c = fcount
+
+		rdir = ''
+		for i in range(0,c):
+			rdir = '/' + strs[i]
+
+		return rdir
+
+	def ResetDir2(dir2):
+		strs = dir2.split('/')
+		slen = len(strs)
+		rdir = ''
+		for i in range(0, slen):
+			if strs[i] != '..':
+				rdir = rdir + strs[i] + '/'
+		return rdir
+
+	def GetDotCount(self, dir):
+		count = 0
+		strs = dir.split('/')	
+		for d in strs:
+			if d == '..':
+				count = count + 1
+		return count 
