@@ -104,7 +104,6 @@ class FrmMain(wx.Frame):
 		self.ShowPanel(2)
 
 	def onRun(self, event):
-		print 'onRun'
 		self.ShowPanel(3)
 
 	def onResult(self, event):
@@ -132,7 +131,6 @@ class FrmMain(wx.Frame):
 		for p in self.panels:
 			if(p!=None):
 				p.Show(False)
-		print len(self.panels)
 		if(index<len(self.panels)):
 			p = self.panels[index]
 			if(p!=None):
@@ -140,7 +138,6 @@ class FrmMain(wx.Frame):
 				self.hbox_main.Layout()
 
 	def GetPanel(self, index):
-		print len(self.panels)
 		if(index<len(self.panels)):
 			return self.panels[index]
 		return None
