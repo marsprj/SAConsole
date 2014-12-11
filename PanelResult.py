@@ -125,12 +125,13 @@ class ResultPanel(wx.Panel):
 		print dcount
 
 		rdir1 = self.ResetDir1(self.sa_dir, dcount)
+		print self.sa_dir
 		print rdir1
 
 		rdir2 = self.ResetDir2(config_sub_dir)
 		print rdir2
 
-		return os.path.join(self.sa_dir, config_sub_dir)
+		return os.path.join(rdir1, rdir2)
 
 	def GetOutputSubDir(self):
 		config_path = os.path.join(self.sa_dir, 'control_variables_grid.csv')
@@ -140,7 +141,7 @@ class ResultPanel(wx.Panel):
 			for line in f.readlines():
 				strs = line.split(',')
 				if strs[0] == 'OUTPUT DIRECTORY':
-					return strs[0]
+					return strs[1]
 					break
 		except IOError,e:
 			logging.error(e)
@@ -151,6 +152,8 @@ class ResultPanel(wx.Panel):
 	
 
 	def ResetDir1(self, dir1, fcount):
+		print '[fcount]:'
+		print fcount
 		strs = dir1.split('/')
 		slen = len(strs)
 		if strs[slen-1]=='':
@@ -158,18 +161,22 @@ class ResultPanel(wx.Panel):
 		else:
 			c = fcount
 
+		print (slen-c)
 		rdir = ''
-		for i in range(0,c):
-			rdir = '/' + strs[i]
+		for i in range(0,slen-c):
+			rdir = rdir + '/' + strs[i]
 
 		return rdir
 
 	def ResetDir2(self, dir2):
+		print 'ResetDir2'
 		strs = dir2.split('/')
 		slen = len(strs)
 		rdir = ''
 		for i in range(0, slen):
+			print strs[i]
 			if strs[i] != '..':
+				print '...' + strs[i]
 				rdir = rdir + strs[i] + '/'
 		return rdir
 
