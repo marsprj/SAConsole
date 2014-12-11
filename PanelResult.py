@@ -21,13 +21,6 @@ class ResultPanel(wx.Panel):
 		#self.sa_out  = os.path.join(self.sa_base, 'output/somegrid')
 		self.sa_out = self.GetOutputDir()
 
-		#print self.sa_out
-
-		#self.sa_out  = 'g:\\'
-		#self.sa_out  = 'G:\\Software\\Tool'
-		#self.sa_out  = 'E:\\Research\\SAConsole\\v-0.0.3'
-		#self.sa_out  = 'G:\\temp'
-		
 		vbox = wx.BoxSizer(wx.VERTICAL)
 
 		hbox1 = wx.BoxSizer(wx.HORIZONTAL)
@@ -35,10 +28,10 @@ class ResultPanel(wx.Panel):
 		#st1.SetFont(font)
 
 		hbox1.Add(st1,flag=wx.RIGHT,border=8)
-		txtPath = wx.TextCtrl(self,style=wx.TE_READONLY)
-		txtPath.SetBackgroundColour('#FFFFFF')
-		txtPath.SetValue(self.sa_out)
-		hbox1.Add(txtPath,proportion=1)		
+		self.txtPath = wx.TextCtrl(self,style=wx.TE_READONLY)
+		self.txtPath.SetBackgroundColour('#FFFFFF')
+		self.txtPath.SetValue(self.sa_out)
+		hbox1.Add(self.txtPath,proportion=1)		
 		vbox.Add(hbox1,flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
 
 		btn = wx.Button(self, -1, u"刷新")
@@ -123,14 +116,10 @@ class ResultPanel(wx.Panel):
 		config_sub_dir = self.GetOutputSubDir()
 
 		dcount = self.GetDotCount(config_sub_dir)
-		print dcount
 
 		rdir1 = self.ResetDir1(self.sa_dir, dcount)
-		print self.sa_dir
-		print rdir1
 
 		rdir2 = self.ResetDir2(config_sub_dir)
-		print rdir2
 
 		return os.path.join(rdir1, rdir2)
 
@@ -153,8 +142,6 @@ class ResultPanel(wx.Panel):
 	
 
 	def ResetDir1(self, dir1, fcount):
-		print '[fcount]:'
-		print fcount
 		strs = dir1.split('/')
 		slen = len(strs)
 		if strs[slen-1]=='':
@@ -162,22 +149,23 @@ class ResultPanel(wx.Panel):
 		else:
 			c = fcount
 
-		print (slen-c)
 		rdir = ''
 		for i in range(0,slen-c):
-			rdir = rdir + '/' + strs[i]
+			#print strs[i]
+			if len(strs[i])>0:
+				rdir = rdir + '/' + strs[i]
+				#print rdir
 
 		return rdir
 
 	def ResetDir2(self, dir2):
-		print 'ResetDir2'
 		strs = dir2.split('/')
 		slen = len(strs)
 		rdir = ''
 		for i in range(0, slen):
-			print strs[i]
+			#print strs[i]
 			if strs[i] != '..':
-				print '...' + strs[i]
+				#print '...' + strs[i]
 				rdir = rdir + strs[i] + '/'
 		return rdir
 
@@ -191,6 +179,6 @@ class ResultPanel(wx.Panel):
 
 	def Update(self):
 		self.sa_out = self.GetOutputDir()
-		txtPath.SetValue(self.sa_out)
+		self.txtPath.SetValue(self.sa_out)
 		self.UpdateTreeNode(self.treeRoot, self.sa_out)
 		self.treeCtrl.ExpandAll()
