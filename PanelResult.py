@@ -19,7 +19,7 @@ class ResultPanel(wx.Panel):
 		self.sa_base = os.path.join(self.sa_home, self.sa_name)
 		self.sa_dir  = os.path.join(self.sa_base, 'srgtools')
 		#self.sa_out  = os.path.join(self.sa_base, 'output/somegrid')
-		slef.sa_out = self.GetOutputDir()
+		self.sa_out = self.GetOutputDir()
 
 		#print self.sa_out
 
@@ -133,18 +133,21 @@ class ResultPanel(wx.Panel):
 		return os.path.join(self.sa_dir, config_sub_dir)
 
 	def GetOutputSubDir(self):
-		config_path = os.path.join(self.sa_dir, control_variables_grid.csv)
+		config_path = os.path.join(self.sa_dir, 'control_variables_grid.csv')
 		f = None
 		try:
-			f = open(config_path):
+			f = open(config_path)
 			for line in f.readlines():
 				strs = line.split(',')
-					if strs[0] == 'OUTPUT DIRECTORY':
-						return strs[0]
-						break
+				if strs[0] == 'OUTPUT DIRECTORY':
+					return strs[0]
+					break
+		except IOError,e:
+			logging.error(e)
 		finally:
 			if f!=None:
 				f.close()
+		return ''
 	
 
 	def ResetDir1(self, dir1, fcount):
@@ -161,7 +164,7 @@ class ResultPanel(wx.Panel):
 
 		return rdir
 
-	def ResetDir2(dir2):
+	def ResetDir2(self, dir2):
 		strs = dir2.split('/')
 		slen = len(strs)
 		rdir = ''

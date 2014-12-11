@@ -106,5 +106,3 @@ class RunPanel(wx.Panel):
 	def WriteLog(self, message):
 		pass
 
-	def GetOutputSubDir(self):
-		pass
