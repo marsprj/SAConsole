@@ -189,7 +189,7 @@ class ResultPanel(wx.Panel):
 				count = count + 1
 		return count 
 
-	def Update(slef):
+	def Update(self):
 		self.sa_out = self.GetOutputDir()
 		txtPath.SetValue(self.sa_out)
 		self.UpdateTreeNode(self.treeRoot, self.sa_out)
